@@ -1,17 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+const TelegramBot = require("node-telegram-bot-api");
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const token = "7402142202:AAEjCbVeObCaYM3ecYEDicbqaNW5vkAyiY8";
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const bot = new TelegramBot(token, { polling: true });
+
+const webAppUrl = "https://monumental-puffpuff-7cfd01.netlify.app/";
+
+bot.on("message", async (msg) => {
+  const chatId = msg.chat.id;
+  const text = msg.text;
+
+  if (text === "/start") {
+    await bot.sendMessage(chatId, "Открой Web-приложение", {
+      reply_markup: {
+        keyboard: [
+          [
+            {
+              text: "Открыть Web-приложение",
+              web_app: { url: webAppUrl },
+            },
+          ],
+        ],
+      },
+    });
+  }
+  bot.sendMessage(chatId, "Received your message");
+});
